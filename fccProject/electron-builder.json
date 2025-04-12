@@ -1,6 +1,7 @@
 {
     "appId": "com.galaxus.fccApp",
     "files": ["dist-electron", "dist-react"],
+    "extraResources": ["dist-electron/preload.cjs"],
     "icon": "./appIcon.png",
     "mac": {
         "target": "dmg"
