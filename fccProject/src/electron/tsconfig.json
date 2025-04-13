@@ -15,5 +15,7 @@
         "skipLibCheck": true,
         // ignore errors from dependencies
         // if dependencies don't match the following tsconfig rules, it will ignore it
+
+        "types": ["../../types"]
     }
 }

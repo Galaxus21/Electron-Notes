@@ -2,9 +2,27 @@ import electron = require('electron');
 
 electron.contextBridge.exposeInMainWorld("electron", {
     subscribeStatistics: (callback: (statistics:any)=> void) => {
-        electron.ipcRenderer.on("statistics", (_ , stats)=>{
+        ipcOn("statistics", (stats)=>{
             callback(stats);
         })
     },
-    getStaticData: () => electron.ipcRenderer.invoke('getStaticData')
-})
+    getStaticData: () => ipcInvoke('getStaticData')
+} satisfies Window['electron']);
+
+/* 
+    preload can't import functions from util because of the way electron-builder handles things,
+    so we have to define some typesafe wrapper functions here.
+*/
+
+function ipcInvoke<Key extends keyof EventPayloadMapping>(
+    key: Key
+): Promise<EventPayloadMapping[Key]>{
+    return electron.ipcRenderer.invoke(key);
+}
+
+function ipcOn<Key extends keyof EventPayloadMapping>(
+    key: Key,
+    callback: (payload: EventPayloadMapping[Key]) => void
+) {
+    electron.ipcRenderer.on(key,(_, payload)=> callback(payload))   
+}
