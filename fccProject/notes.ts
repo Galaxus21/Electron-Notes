@@ -15,3 +15,5 @@
 // npm-run-all : A package used to run multiple npm cmds in parallel.
 
 // '// @ts-ignore' - This comment ignores the type problems in ts.
+
+// using 'recharts' for making chart

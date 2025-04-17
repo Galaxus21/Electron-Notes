@@ -1,18 +1,25 @@
-import { useEffect, useState } from 'react'
+import { useMemo, useState } from 'react'
 import reactLogo from '../assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { useStatistics } from './useStatistics'
+import { Chart } from './Chart'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  
+  const statistics = useStatistics(10);
+  const cpuUsages = useMemo(
+    ()=> statistics.map(stat => stat.ramUsage),
+    [statistics]
+  );
 
-  useEffect(()=>{
-    const unsub = window.electron.subscribeStatistics(stats => console.log(stats));
-    return unsub(); //run only when component unmounts or re-rendered.
-  },[])
 
   return (
     <>
+      <div style={{height: 120}}>
+        <Chart data={cpuUsages}/>
+      </div>
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
