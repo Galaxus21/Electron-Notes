@@ -1,11 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
-import reactLogo from '../assets/react.svg'
 import './App.css'
 import { useStatistics } from './useStatistics'
 import { Chart } from './Chart'
 
 function App() {
-  const [count, setCount] = useState(0);
   
   const statistics = useStatistics(10);
   const [activeView, setActiveView] = useState<View>("CPU");
@@ -40,33 +38,40 @@ function App() {
 
   return (
     <>
-      <header>
-        <button id='minimize' onClick={() => window.electron.sendFrameAction("MINIMIZE")}/>
-        <button id='maximize' onClick={() => window.electron.sendFrameAction("MAXIMIZE")}/>
-        <button id='close' onClick={() => window.electron.sendFrameAction("CLOSE")}/>
-      </header>
-      <div style={{height: 120}}>
-        <Chart data={activeUsages}/>
+      <Header />
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr', alignItems: 'center'}}>
+        <div style={{display: 'inline'}}>
+          <div style={{height:75, width:300, margin:'2rem'}} onClick={() => setActiveView("CPU")}>
+            CPU
+            <Chart data={cpuUsages}/>
+          </div>
+          <div style={{height:75, width:300, margin:'2rem'}} onClick={() => setActiveView("RAM")}>
+            RAM
+            <Chart data={ramUsages}/>
+          </div>
+          <div style={{height:75, width:300, margin:'2rem'}} onClick={() => setActiveView("Storage")}>
+            STORAGE
+            <Chart data={storageUsages}/>
+          </div>
+        </div>
+        <div style={{height: 120,display: 'inline'}}>
+          <Chart data={activeUsages}/>
+        </div>  
+
       </div>
-      <div>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      
+      
+          
     </>
   )
+}
+
+function Header() {
+  return (<header>
+    <button id='minimize' onClick={() => window.electron.sendFrameAction("MINIMIZE")}/>
+    <button id='maximize' onClick={() => window.electron.sendFrameAction("MAXIMIZE")}/>
+    <button id='close' onClick={() => window.electron.sendFrameAction("CLOSE")}/>
+  </header>)
 }
 
 export default App
