@@ -1,12 +1,16 @@
 import electron = require('electron');
 
 electron.contextBridge.exposeInMainWorld("electron", {
-    subscribeStatistics: (callback: (statistics:any)=> void) =>
-        ipcOn("statistics", (stats)=>{
+    subscribeStatistics: (callback) =>
+        ipcOn("statistics", (stats) => {
             callback(stats);
         })
     ,
-    getStaticData: () => ipcInvoke('getStaticData')
+    getStaticData: () => ipcInvoke('getStaticData'),
+    subscribeChangeView: (callback) => 
+        ipcOn("changeView", (view) => {
+            callback(view)
+        })
 } satisfies Window['electron']);
 
 /* 
